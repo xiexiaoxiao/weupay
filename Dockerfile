@@ -1,4 +1,4 @@
-FROM golang:1.5.1
+FROM daocloud.io/library/golang:1.6.2
 
 # Build app
 ADD . $GOPATH/src/weupay
