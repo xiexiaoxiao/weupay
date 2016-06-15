@@ -55,10 +55,10 @@ func Reply(req *Request) (res *Response, err error) {
 	beego.Info("req MsgType:" + req.MsgType)
 	beego.Info("req Content:" + req.Content)
 	if req.MsgType != TEXT {
-		res.Content = "暂时还不支持其他的类型"
+		res.Content = "not supported"
 		return
 	}
 
-	res.Content = "您说的是:" + req.Content
+	res.Content = "you say:" + req.Content
 	return
 }
