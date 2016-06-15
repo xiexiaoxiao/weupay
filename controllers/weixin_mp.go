@@ -21,7 +21,6 @@ func (c *WeixinMpController) Post() {
 	var req mp.Request
 	if err := xml.Unmarshal(c.Ctx.Input.RequestBody, &req); err == nil {
 		if res, err := mp.Reply(&req); err == nil {
-			c.Ctx.Output.SetStatus(201)
 			c.Data["xml"] = res
 		} else {
 			c.Data["xml"] = err.Error()
