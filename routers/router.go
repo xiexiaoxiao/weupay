@@ -25,6 +25,11 @@ func init() {
 				&controllers.UserController{},
 			),
 		),
+		beego.NSNamespace("/weixin/mp",
+			beego.NSInclude(
+				&controllers.WeixinMpController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

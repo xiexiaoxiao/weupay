@@ -90,4 +90,18 @@ func init() {
 			[]string{"get"},
 			nil})
 
+	beego.GlobalControllerRouter["weupay/controllers:WeixinMpController"] = append(beego.GlobalControllerRouter["weupay/controllers:WeixinMpController"],
+		beego.ControllerComments{
+			"Post",
+			`/`,
+			[]string{"post"},
+			nil})
+
+	beego.GlobalControllerRouter["weupay/controllers:WeixinMpController"] = append(beego.GlobalControllerRouter["weupay/controllers:WeixinMpController"],
+		beego.ControllerComments{
+			"GetAll",
+			`/`,
+			[]string{"get"},
+			nil})
+
 }
