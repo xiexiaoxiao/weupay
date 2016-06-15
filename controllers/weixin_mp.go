@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/xml"
 	"github.com/astaxie/beego"
-	"weupay/models/weixin/mp"
+	"weupay/models/weixinmp"
 )
 
 // operations for WeixinMp
@@ -18,9 +18,9 @@ func (c *WeixinMpController) URLMapping() {
 
 // @router / [post]
 func (c *WeixinMpController) Post() {
-	var req mp.Request
+	var req weixinmp.Request
 	if err := xml.Unmarshal(c.Ctx.Input.RequestBody, &req); err == nil {
-		if res, err := mp.Reply(&req); err == nil {
+		if res, err := weixinmp.Reply(&req); err == nil {
 			c.Data["xml"] = res
 		} else {
 			c.Data["xml"] = err.Error()
@@ -42,7 +42,7 @@ func (c *WeixinMpController) GetAll() {
 	echostr := c.GetString("echostr")
 	beego.Info("echostr:" + echostr)
 
-	localSign := mp.Signature(timestamp, nonce)
+	localSign := weixinmp.Signature(timestamp, nonce)
 	beego.Info("local sign:" + localSign)
 	if localSign == signature {
 		c.Ctx.WriteString(echostr)

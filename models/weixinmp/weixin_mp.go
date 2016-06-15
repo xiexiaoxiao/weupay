@@ -1,4 +1,4 @@
-package mp
+package weixinmp
 
 import (
 	"crypto/sha1"
