@@ -2,7 +2,9 @@ package mp
 
 import (
 	"crypto/sha1"
+	"encoding/xml"
 	"fmt"
+	"github.com/astaxie/beego"
 	"sort"
 	"time"
 )
@@ -15,9 +17,20 @@ const (
 type BaseMsg struct {
 	ToUserName   string
 	FromUserName string
-	CreateTime   time.Duration
+	CreateTime   int64
 	MsgType      string
 	Content      string
+}
+
+type Request struct {
+	XMLName xml.Name `xml:"xml"`
+	MsgId   int
+	BaseMsg
+}
+
+type Response struct {
+	XMLName xml.Name `xml:"xml"`
+	BaseMsg
 }
 
 func Signature(timestamp, nonce string) string {
@@ -30,4 +43,22 @@ func Signature(timestamp, nonce string) string {
 	h := sha1.New()
 	h.Write([]byte(baseStr))
 	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+func Reply(req *Request) (res *Response, err error) {
+	res = &Response{}
+	res.CreateTime = time.Now().Unix()
+	res.ToUserName = req.FromUserName
+	res.FromUserName = req.ToUserName
+	res.MsgType = TEXT
+
+	beego.Info("req MsgType:" + req.MsgType)
+	beego.Info("req Content:" + req.Content)
+	if req.MsgType != TEXT {
+		res.Content = "暂时还不支持其他的类型"
+		return
+	}
+
+	res.Content = "您说的是:" + req.Content
+	return
 }

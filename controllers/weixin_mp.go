@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/xml"
 	"github.com/astaxie/beego"
 	"weupay/models/weixin/mp"
 )
@@ -15,26 +16,22 @@ func (c *WeixinMpController) URLMapping() {
 	c.Mapping("GetAll", c.GetAll)
 }
 
-// @Title Post
-// @Description create WeixinMp
-// @Param	body		body 	models.WeixinMp	true		"body for WeixinMp content"
-// @Success 201 {object} models.WeixinMp
-// @Failure 403 body is empty
 // @router / [post]
 func (c *WeixinMpController) Post() {
-
+	var req mp.Request
+	if err := xml.Unmarshal(c.Ctx.Input.RequestBody, &req); err == nil {
+		if res, err := mp.Reply(&req); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["xml"] = res
+		} else {
+			c.Data["xml"] = err.Error()
+		}
+	} else {
+		c.Data["xml"] = err.Error()
+	}
+	c.ServeXML()
 }
 
-// @Title Get All
-// @Description get WeixinMp
-// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
-// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
-// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
-// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.WeixinMp
-// @Failure 403
 // @router / [get]
 func (c *WeixinMpController) GetAll() {
 	signature := c.GetString("signature")
